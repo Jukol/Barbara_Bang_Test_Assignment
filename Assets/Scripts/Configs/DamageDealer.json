@@ -1,0 +1,8 @@
+{
+  "Type" : "DamageDealer",
+  "Health" : 100,
+  "MaxHealth" : 100,
+  "InitCoordX" : 1,
+  "InitCoordY" : 1,
+  "PrimaryAbility" : "DealDamage"
+}
