@@ -2,7 +2,7 @@
 using Infrastructure;
 namespace Models
 {
-    public class InitializeUnits
+    public class UnitInitializer
     {
         private DependencyInjector _dependencyInjector;
         
