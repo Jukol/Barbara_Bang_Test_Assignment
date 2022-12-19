@@ -6,7 +6,7 @@ namespace Models
     {
         private DependencyInjector _dependencyInjector;
         
-        public InitializeUnits(DependencyInjector dependencyInjector) => 
+        public UnitInitializer(DependencyInjector dependencyInjector) => 
             _dependencyInjector = dependencyInjector;
 
         private UnitCreator _unitCreator;

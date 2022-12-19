@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Net.Mime;
 using Infrastructure;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Models
 {
@@ -12,9 +14,9 @@ namespace Models
         public UnitCreator(DependencyInjector dependencyInjector) => 
             _dependencyInjector = dependencyInjector;
         
-        private const string Tank = "Scripts/Configs/Tank.json";
-        private const string DamageDealer = "Scripts/Configs/DamageDealer.json";
-        private const string Healer = "Scripts/Configs/Healer.json";
+        private const string Tank = "Configs/Tank";
+        private const string DamageDealer = "Configs/DamageDealer";
+        private const string Healer = "Configs/Healer";
         
         public Unit CreateUnit(UnitType type, bool enemy)
         {
@@ -31,10 +33,11 @@ namespace Models
             }
         }
 
-        private UnitData Deserialize(string json)
+        private UnitData Deserialize(string jsonPath)
         {
-            string tankJson = File.ReadAllText(json);
-            return JsonConvert.DeserializeObject<UnitData>(tankJson);
+            TextAsset file = Resources.Load<TextAsset>(jsonPath);
+            return JsonUtility.FromJson<UnitData>(file.text);
+            //return JsonConvert.DeserializeObject<UnitData>(file.text);
         }
     }
 }

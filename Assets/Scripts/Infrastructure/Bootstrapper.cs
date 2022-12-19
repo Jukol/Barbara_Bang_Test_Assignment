@@ -1,23 +1,19 @@
-using Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 namespace Infrastructure
 {
     public class Bootstrapper : MonoBehaviour
     {
-        private DependencyInjector _dependencyInjector;
+        public Game Game;
+        
         private void Awake()
         {
-            _dependencyInjector = new DependencyInjector();
-            _dependencyInjector.Register(new Abilities(_dependencyInjector));
-            _dependencyInjector.Register(new UnitCreator(_dependencyInjector));
-            _dependencyInjector.Register(new UnitInitializer(_dependencyInjector));
-        }
-        
-        private void Start()
-        {
-            _dependencyInjector.Resolve<UnitInitializer>().Initialize();
-            SceneManager.LoadScene(1);
+            Game = new Game();
+            Game.Initialize();
+            
+            DontDestroyOnLoad(gameObject);
+            
+            SceneManager.LoadScene(2);
         }
     }
 }
