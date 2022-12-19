@@ -1,19 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Net.Mime;
-using Infrastructure;
-using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Models
 {
     public class UnitCreator
     {
-        private DependencyInjector _dependencyInjector;
-        
-        public UnitCreator(DependencyInjector dependencyInjector) => 
-            _dependencyInjector = dependencyInjector;
-        
         private const string Tank = "Configs/Tank";
         private const string DamageDealer = "Configs/DamageDealer";
         private const string Healer = "Configs/Healer";
@@ -37,7 +28,6 @@ namespace Models
         {
             TextAsset file = Resources.Load<TextAsset>(jsonPath);
             return JsonUtility.FromJson<UnitData>(file.text);
-            //return JsonConvert.DeserializeObject<UnitData>(file.text);
         }
     }
 }
