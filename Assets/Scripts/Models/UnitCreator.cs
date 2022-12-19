@@ -9,16 +9,16 @@ namespace Models
         private const string DamageDealer = "Configs/DamageDealer";
         private const string Healer = "Configs/Healer";
         
-        public Unit CreateUnit(UnitType type, bool enemy)
+        public Unit CreateUnit(UnitType type, bool iSenemy)
         {
             switch (type)
             {
                 case UnitType.Tank:
-                    return new Unit(Deserialize(Tank), UnitType.Tank, enemy);
+                    return new Unit(Deserialize(Tank), UnitType.Tank, iSenemy);
                 case UnitType.DamageDealer:
-                    return new Unit(Deserialize(DamageDealer), UnitType.DamageDealer, enemy);
+                    return new Unit(Deserialize(DamageDealer), UnitType.DamageDealer, iSenemy);
                 case UnitType.Healer:
-                    return new Unit(Deserialize(Healer), UnitType.Healer, enemy);
+                    return new Unit(Deserialize(Healer), UnitType.Healer, iSenemy);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

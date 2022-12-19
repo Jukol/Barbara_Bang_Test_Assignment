@@ -20,8 +20,18 @@ namespace View
             
             unitType = unit.Type.ToString();
             enemyOrFriend = unit.Enemy ? "Enemy" : "Friend";
-            
-            float fullHealthView = healthBar.transform.localScale.x;
+
+            HandleHealthBar(unit);
+        }
+        
+        private void HandleHealthBar(Unit unit)
+        {
+            var localScale = healthBar.transform.localScale;
+            float fullHealthView = localScale.x;
+            float healthPercent = unit.UnitData.health / unit.UnitData.maxHealth;
+            float currentHealthView = fullHealthView * healthPercent;
+            localScale = new Vector3(currentHealthView, localScale.y, localScale.z);
+            healthBar.transform.localScale = localScale;
         }
     }
 }

@@ -5,39 +5,39 @@ namespace Models
         public UnitType Type;
         public bool Enemy;
         
-        private readonly UnitData _unitData;
+        public readonly UnitData UnitData;
 
         public Unit(UnitData unitData, UnitType unitType, bool enemy)
         {
-            _unitData = unitData;
+            UnitData = unitData;
             Type = unitType;
             Enemy = enemy;
         }
 
         public void TakeDamage(int damage)
         {
-            _unitData.health -= damage;
-            if (_unitData.health <= 0)
+            UnitData.health -= damage;
+            if (UnitData.health <= 0)
             {
-                _unitData.health = 0;
+                UnitData.health = 0;
                 Die();
             }
         }
 
         public void Heal(int amount)
         {
-            _unitData.health += amount;
-            if (_unitData.health > _unitData.maxHealth)
+            UnitData.health += amount;
+            if (UnitData.health > UnitData.maxHealth)
             {
-                _unitData.health = _unitData.maxHealth;
+                UnitData.health = UnitData.maxHealth;
             }
         }
 
         public void Buff(int buff) => 
-            _unitData.maxHealth += buff;
+            UnitData.maxHealth += buff;
         
         public void Debuff(int debuff) => 
-            _unitData.maxHealth -= debuff;
+            UnitData.maxHealth -= debuff;
 
         public void Die()
         {
