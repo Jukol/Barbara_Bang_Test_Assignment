@@ -6,6 +6,10 @@ namespace View
     {
         [SerializeField] private string unitType;
         [SerializeField] private string enemyOrFriend;
+        [SerializeField] private int health;
+        [SerializeField] private int maxHealth;
+        [SerializeField] private string primaryAbility;
+
         [SerializeField] private GameObject healthBar;
 
         [SerializeField] private SpriteRenderer spriteRenderer;
@@ -20,8 +24,11 @@ namespace View
             
             unitType = unit.Type.ToString();
             enemyOrFriend = unit.Enemy ? "Enemy" : "Friend";
+            health = unit.UnitData.health;
+            maxHealth = unit.UnitData.maxHealth;
+            primaryAbility = unit.UnitData.ability.ToString();
 
-            HandleHealthBar(unit);
+            //HandleHealthBar(unit);
         }
         
         private void HandleHealthBar(Unit unit)

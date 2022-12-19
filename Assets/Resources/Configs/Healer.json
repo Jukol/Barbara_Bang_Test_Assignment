@@ -1,8 +1,6 @@
 {
-  "Type" : "Healer",
-  "Health" : 100,
-  "MaxHealth" : 100,
-  "InitCoordX" : 2,
-  "InitCoordY" : 2,
-  "PrimaryAbility" : "DealDamage"
+  "type" : "2",
+  "health" : "100",
+  "maxHealth" : "100",
+  "ability" : "1"
 }

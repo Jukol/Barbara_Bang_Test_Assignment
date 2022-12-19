@@ -1,5 +1,8 @@
-﻿namespace Models
+﻿using System;
+
+namespace Data
 {
+    [Serializable]
     public enum UnitType
     {
         Tank,

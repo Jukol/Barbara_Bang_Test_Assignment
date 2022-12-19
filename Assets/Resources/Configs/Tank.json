@@ -1,8 +1,6 @@
 {
-  "Type" : "Tank",
-  "Health" : 500,
-  "MaxHealth" : 500,
-  "InitCoordX" : 0,
-  "InitCoordY" : 0,
-  "PrimaryAbility" : "DealDamage"
+  "type" : "0",
+  "health" : "500",
+  "maxHealth" : "500",
+  "ability" : "0"
 }

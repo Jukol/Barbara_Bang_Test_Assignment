@@ -8,7 +8,7 @@ namespace Infrastructure
         public void Initialize()
         {
             DependencyInjector = new DependencyInjector();
-            DependencyInjector.Register(new Abilities(DependencyInjector));
+            DependencyInjector.Register(new Abilities());
             DependencyInjector.Register(new UnitCreator());
             DependencyInjector.Register(new UnitInitializer(DependencyInjector));
         }

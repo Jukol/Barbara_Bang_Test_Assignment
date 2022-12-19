@@ -1,17 +1,22 @@
+using Data;
 namespace Models
 {
     public struct Unit
     {
         public UnitType Type;
+        public UnitAbility Ability;
         public bool Enemy;
+        public Abilities Abilities; 
         
         public readonly UnitData UnitData;
 
-        public Unit(UnitData unitData, UnitType unitType, bool enemy)
+        public Unit(UnitData unitData, bool enemy)
         {
             UnitData = unitData;
-            Type = unitType;
+            Type = unitData.type;
+            Ability = unitData.ability;
             Enemy = enemy;
+            Abilities = new Abilities();
         }
 
         public void TakeDamage(int damage)
@@ -38,6 +43,14 @@ namespace Models
         
         public void Debuff(int debuff) => 
             UnitData.maxHealth -= debuff;
+        
+        public void UseAbility(Unit target)
+        {
+            if (Ability == UnitAbility.Heal)
+                Abilities.Heal(1, target);
+            else if (Ability == UnitAbility.DealDamage) 
+                Abilities.DealDamage(1, target);
+        }
 
         public void Die()
         {

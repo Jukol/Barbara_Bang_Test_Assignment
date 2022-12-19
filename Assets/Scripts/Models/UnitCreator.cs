@@ -1,4 +1,5 @@
 ﻿using System;
+using Data;
 using UnityEngine;
 
 namespace Models
@@ -14,11 +15,11 @@ namespace Models
             switch (type)
             {
                 case UnitType.Tank:
-                    return new Unit(Deserialize(Tank), UnitType.Tank, iSenemy);
+                    return new Unit(Deserialize(Tank), iSenemy);
                 case UnitType.DamageDealer:
-                    return new Unit(Deserialize(DamageDealer), UnitType.DamageDealer, iSenemy);
+                    return new Unit(Deserialize(DamageDealer), iSenemy);
                 case UnitType.Healer:
-                    return new Unit(Deserialize(Healer), UnitType.Healer, iSenemy);
+                    return new Unit(Deserialize(Healer), iSenemy);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -27,7 +28,14 @@ namespace Models
         private UnitData Deserialize(string jsonPath)
         {
             TextAsset file = Resources.Load<TextAsset>(jsonPath);
-            return JsonUtility.FromJson<UnitData>(file.text);
+            var unitData = JsonUtility.FromJson<UnitData>(file.text);
+
+            var type = unitData.type;
+            var health = unitData.health;
+            var maxHealth = unitData.maxHealth;
+            var ability = unitData.ability;
+
+            return unitData;
         }
     }
 }

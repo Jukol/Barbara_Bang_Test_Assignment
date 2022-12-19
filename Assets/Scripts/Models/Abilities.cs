@@ -6,11 +6,6 @@ namespace Models
     [Serializable]
     public class Abilities
     {
-        private DependencyInjector _dependencyInjector;
-        
-        public Abilities(DependencyInjector dependencyInjector) => 
-            _dependencyInjector = dependencyInjector;
-
         public void DealDamage(int damage, Unit target) => 
             target.TakeDamage(damage);
 
