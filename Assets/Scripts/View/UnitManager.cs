@@ -1,4 +1,5 @@
-﻿using Data;
+﻿using System.Collections.Generic;
+using Data;
 using Infrastructure;
 using Models;
 using UnityEngine;
@@ -20,6 +21,9 @@ namespace View
 
         private DependencyInjector _dependencyInjector;
         private UnitInitializer _unitInitializer;
+        
+        private readonly List<UnitView> _friendUnits = new();
+        private readonly List<UnitView> _enemyUnits = new();
 
         public void Init(DependencyInjector dependencyInjector)
         {
@@ -45,6 +49,10 @@ namespace View
                     UnitType.DamageDealer => friendDamageDealerPosition.position,
                     _ => unitTransform.position
                 };
+                
+                unit.Deselect();
+                unit.OnUnitClicked += OnUnitClicked;
+                _friendUnits.Add(unit);
             }
             
             foreach (var enemy in _unitInitializer.Enemies)
@@ -60,7 +68,19 @@ namespace View
                     UnitType.DamageDealer => enemyDamageDealerPosition.position,
                     _ => unitTransform.position
                 };
+                
+                unit.Deselect();
+                _enemyUnits.Add(unit);
             }
+        }
+        
+        private void OnUnitClicked(UnitView unitView)
+        {
+            foreach (var friend in _friendUnits)
+            {
+                friend.Deselect();
+            }
+            unitView.Select();
         }
     }
 }

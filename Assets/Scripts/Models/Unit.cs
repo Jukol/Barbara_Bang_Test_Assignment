@@ -5,18 +5,20 @@ namespace Models
     {
         public UnitType Type;
         public UnitAbility Ability;
-        public bool Enemy;
-        public Abilities Abilities; 
+        public bool IsEnemy;
+        public Abilities Abilities;
+        public bool IsActive;
         
         public readonly UnitData UnitData;
 
-        public Unit(UnitData unitData, bool enemy)
+        public Unit(UnitData unitData, bool isEnemy)
         {
             UnitData = unitData;
             Type = unitData.type;
             Ability = unitData.ability;
-            Enemy = enemy;
+            IsEnemy = isEnemy;
             Abilities = new Abilities();
+            IsActive = false;
         }
 
         public void TakeDamage(int damage)
