@@ -20,12 +20,16 @@ namespace View
         [SerializeField] private Transform enemyTankPosition;
         [SerializeField] private Transform enemyDamageDealerPosition;
         [SerializeField] private Transform enemyHealerPosition;
-
+        [SerializeField] private LineRenderer lineRenderer;
+        
         private DependencyInjector _dependencyInjector;
         private UnitInitializer _unitInitializer;
         
         private readonly List<UnitView> _friendUnits = new();
         private readonly List<UnitView> _enemyUnits = new();
+        
+        private Vector2 _lineStart;
+        private Vector2 _lineEnd;
 
         public void Init(DependencyInjector dependencyInjector)
         {
@@ -79,21 +83,32 @@ namespace View
         
         private void OnUnitClicked(UnitView unitView)
         {
+            ChooseUnitOrTarget(unitView);
+        }
+        
+        private void ChooseUnitOrTarget(UnitView unitView)
+        {
             var anyAiming = _friendUnits.Any(x => x.Unit.State == UnitStates.Aiming);
             var anyTargeted = _friendUnits.Any(x => x.Unit.State == UnitStates.Targeted);
+            var anyTargetedEnemy = _enemyUnits.Any(x => x.Unit.State == UnitStates.Targeted);
 
-            if (anyAiming && anyTargeted) return;
-            
+            if ((anyAiming && anyTargeted) || anyTargetedEnemy) return;
+
             if (unitView.Unit.State == UnitStates.Inactive)
             {
                 if (anyAiming)
                 {
                     unitView.Unit.State = UnitStates.Targeted;
+                        
+                    _lineEnd = unitView.transform.position; ;
+                    DrawLine(_lineStart, _lineEnd);
+                    
                     unitView.Select();
                 }
                 else
                 {
                     unitView.Unit.State = UnitStates.Aiming;
+                    _lineStart = unitView.transform.position;
                     unitView.Select();
                 }
             }
@@ -103,25 +118,24 @@ namespace View
                 enemy.Unit.State = UnitStates.Inactive;
                 enemy.Deselect();
             }
-            
+
             unitView.UnitViewUpdate();
         }
 
         private void OnEnemyClicked(UnitView unitView)
         {
-            foreach (var enemy in _enemyUnits) enemy.Deselect();
+            var anyTargeted = _enemyUnits.Any(x => x.Unit.State == UnitStates.Targeted);
+            var anyAimingFriend = _friendUnits.Any(x => x.Unit.State == UnitStates.Aiming);
+            var anyTargetedFriend = _friendUnits.Any(x => x.Unit.State == UnitStates.Targeted);
+            
+            if (anyTargeted || anyTargetedFriend || !anyAimingFriend) return;
+            
             unitView.Select();
             unitView.Unit.State = UnitStates.Targeted;
             
-            foreach (var friend in _friendUnits)
-            {
-                if (friend.Unit.State == UnitStates.Targeted)
-                {
-                    friend.Unit.State = UnitStates.Inactive;
-                    friend.Deselect();
-                }
-            }
-            
+            _lineEnd = unitView.transform.position;
+            DrawLine(_lineStart, _lineEnd);
+
             unitView.UnitViewUpdate();
         }
 
@@ -151,6 +165,14 @@ namespace View
                 enemy.Deselect();
                 enemy.UnitViewUpdate();
             }
+            lineRenderer.enabled = false;
+        }
+
+        private void DrawLine(Vector3 start, Vector3 end)
+        {
+            lineRenderer.enabled = true;
+            lineRenderer.SetPosition(0, start);
+            lineRenderer.SetPosition(1, end);
         }
     }
 }
