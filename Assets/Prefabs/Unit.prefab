@@ -185,11 +185,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitType: 
-  enemyOrFriend: 
   health: 0
   maxHealth: 0
   primaryAbility: 
-  selection: {fileID: 9160543019974847056}
+  selection: {fileID: 7700472897366654508}
+  stateView: 0
   healthBar: {fileID: 3237978458348677697}
   spriteRenderer: {fileID: 5808702943865461419}
 --- !u!61 &6391409329343130791
@@ -292,7 +292,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0.8950244, b: 0.02264148, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

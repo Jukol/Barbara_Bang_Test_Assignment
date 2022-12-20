@@ -5,9 +5,9 @@ namespace Models
     {
         public UnitType Type;
         public UnitAbility Ability;
-        public bool IsEnemy;
         public Abilities Abilities;
-        public bool IsActive;
+        public bool IsEnemy;
+        public UnitStates State;
         
         public readonly UnitData UnitData;
 
@@ -16,9 +16,9 @@ namespace Models
             UnitData = unitData;
             Type = unitData.type;
             Ability = unitData.ability;
-            IsEnemy = isEnemy;
             Abilities = new Abilities();
-            IsActive = false;
+            State = UnitStates.Inactive;
+            IsEnemy = isEnemy;
         }
 
         public void TakeDamage(int damage)
