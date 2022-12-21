@@ -159,29 +159,7 @@ namespace View
                 aimingEnemy.Unit.State = UnitStates.Aiming;
                 target.Unit.State = UnitStates.Targeted;
                 
-                _lineStart = aimingEnemy.transform.position;
-                _lineEnd = target.transform.position;
-                DrawLine(_lineStart, _lineEnd);
-
-                await Task.Delay(2000);
-
-                aimingEnemy.Unit.UseAbility(target.Unit);
-                aimingEnemy.UnitViewUpdate();
-                target.UnitViewUpdate();
-                target.HealthUpdate();
-                lineRenderer.enabled = false;
-                
-                foreach (var friend in _friends)
-                {
-                    friend.Unit.State = UnitStates.Inactive;
-                    friend.Deselect();
-                }
-                
-                foreach (var enemy in _enemies)
-                {
-                    enemy.Unit.State = UnitStates.Inactive;
-                    enemy.Deselect();
-                }
+                await FireOrHeal(aimingEnemy, target);
             }
             else if (typeOfAimingEnemy == UnitType.Tank || typeOfAimingEnemy == UnitType.DamageDealer)
             {
@@ -189,29 +167,35 @@ namespace View
                 aimingEnemy.Unit.State = UnitStates.Aiming;
                 target.Unit.State = UnitStates.Targeted;
                 
-                _lineStart = aimingEnemy.transform.position;
-                _lineEnd = target.transform.position;
-                DrawLine(_lineStart, _lineEnd);
+                await FireOrHeal(aimingEnemy, target);
+            }
+        }
+        
+        private async Task FireOrHeal(UnitView aimingEnemy, UnitView target)
+        {
 
-                await Task.Delay(2000);
-                
-                aimingEnemy.Unit.UseAbility(target.Unit);
-                aimingEnemy.UnitViewUpdate();
-                target.UnitViewUpdate();
-                target.HealthUpdate();
-                lineRenderer.enabled = false;
-                
-                foreach (var friend in _friends)
-                {
-                    friend.Unit.State = UnitStates.Inactive;
-                    friend.Deselect();
-                }
-                
-                foreach (var enemy in _enemies)
-                {
-                    enemy.Unit.State = UnitStates.Inactive;
-                    enemy.Deselect();
-                }
+            _lineStart = aimingEnemy.transform.position;
+            _lineEnd = target.transform.position;
+            DrawLine(_lineStart, _lineEnd);
+
+            await Task.Delay(2000);
+
+            aimingEnemy.Unit.UseAbility(target.Unit);
+            aimingEnemy.UnitViewUpdate();
+            target.UnitViewUpdate();
+            target.HealthUpdate();
+            lineRenderer.enabled = false;
+
+            foreach (var friend in _friends)
+            {
+                friend.Unit.State = UnitStates.Inactive;
+                friend.Deselect();
+            }
+
+            foreach (var enemy in _enemies)
+            {
+                enemy.Unit.State = UnitStates.Inactive;
+                enemy.Deselect();
             }
         }
 
