@@ -24,7 +24,6 @@ namespace View
         
         private readonly List<UnitView> _enemiesWithLoweredHealth = new();
 
-        
         public void Init(List<UnitView> friends, List<UnitView> enemies)
         {
             _friends = friends;
@@ -34,22 +33,113 @@ namespace View
             {
                 friend.Deselect();
                 friend.OnUnitClicked += OnFriendClicked;
+                friend.OnUnitViewDied += OnUnitViewDied;
             }
 
             foreach (var enemy in _enemies)
             {
                 enemy.Deselect();
                 enemy.OnUnitClicked += OnEnemyClicked;
+                enemy.OnUnitViewDied += OnUnitViewDied;
             }
         }
 
+        public async void FriendsTurn()
+        {
+            var targetEnemy = _enemies.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
+            var targetFriend = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
+            var aimingUnit = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Aiming);
+
+            if (targetEnemy != null && aimingUnit != null)
+            {
+                await DamageOrHeal(aimingUnit, targetEnemy);
+            }
+            else if (targetFriend != null && aimingUnit != null)
+            {
+                await DamageOrHeal(aimingUnit, targetFriend);
+            }
+            else if (targetFriend != null && targetFriend.Unit.Type == UnitType.Healer && aimingUnit == null)
+            {
+                await DamageOrHeal(targetFriend, targetFriend);//self heal
+            }
+        }
+
+        public async void EnemiesTurn()
+        {
+            _enemiesWithLoweredHealth.Clear();
+
+            for (var i = 0; i < _enemies.Count; i++)
+            {
+                var enemy = _enemies[i];
+                enemy.Unit.State = UnitStates.Inactive;
+                if (enemy.Unit.UnitData.health < enemy.Unit.UnitData.maxHealth) 
+                    _enemiesWithLoweredHealth.Add(enemy);
+            }
+
+            var random = Random.Range(0, _enemies.Count);
+            var aimingEnemy = _enemies[random];
+            var typeOfAimingEnemy = aimingEnemy.Unit.Type;
+
+            if (typeOfAimingEnemy == UnitType.Healer)
+            {
+                if (_enemiesWithLoweredHealth.Count == 0)
+                {
+                    EnemiesTurn();
+                    return;
+                }
+                
+                var target = _enemiesWithLoweredHealth[Random.Range(0, _enemiesWithLoweredHealth.Count)];
+                
+                ChangeStateAndUpdate(aimingEnemy, UnitStates.Aiming);
+                ChangeStateAndUpdate(target, UnitStates.Targeted);
+                
+                await DamageOrHeal(aimingEnemy, target);
+            }
+            else if (typeOfAimingEnemy is UnitType.Tank or UnitType.DamageDealer)
+            {
+                var target = _friends[Random.Range(0, _friends.Count)];
+                
+                ChangeStateAndUpdate(aimingEnemy, UnitStates.Aiming);
+                ChangeStateAndUpdate(target, UnitStates.Targeted);
+                
+                await DamageOrHeal(aimingEnemy, target);
+            }
+
+            Debug.Log("Enemy made move");
+            
+            NextTurn = false;
+        }
+
+        private void ChangeStateAndUpdate(UnitView unitView, UnitStates state)
+        {
+            unitView.Unit.State = state;
+            unitView.Select();
+            unitView.UnitViewUpdate();
+        }
+        
         private void OnFriendClicked(UnitView unitView)
         {
-            ChooseUnitOrTarget(unitView);
+            ChooseSelfOrTarget(unitView);
             NextTurn = true;
         }
 
-        private void ChooseUnitOrTarget(UnitView unitView)
+        private void OnEnemyClicked(UnitView unitView)
+        {
+            GetUnitStatesInfo();
+            
+            if (_anyTargetedEnemy || _anyTargetedFriend || !_anyAimingFriend) return;
+            
+            unitView.Select();
+            unitView.Unit.State = UnitStates.Targeted;
+            
+            _lineEnd = unitView.transform.position;
+            DrawLine(_lineStart, _lineEnd);
+
+            unitView.UnitViewUpdate();
+            NextTurn = true;
+        }
+
+        private void ChooseSelfOrTarget(UnitView unitView)
         {
             GetUnitStatesInfo();
 
@@ -83,22 +173,6 @@ namespace View
 
             unitView.UnitViewUpdate();
         }
-        
-        private void OnEnemyClicked(UnitView unitView)
-        {
-            GetUnitStatesInfo();
-            
-            if (_anyTargetedEnemy || _anyTargetedFriend || !_anyAimingFriend) return;
-            
-            unitView.Select();
-            unitView.Unit.State = UnitStates.Targeted;
-            
-            _lineEnd = unitView.transform.position;
-            DrawLine(_lineStart, _lineEnd);
-
-            unitView.UnitViewUpdate();
-            NextTurn = true;
-        }
 
         private void GetUnitStatesInfo()
         {
@@ -106,86 +180,15 @@ namespace View
             _anyTargetedFriend = _friends.Any(x => x.Unit.State == UnitStates.Targeted);
             _anyTargetedEnemy = _enemies.Any(x => x.Unit.State == UnitStates.Targeted);
         }
-        
+
         private void DrawLine(Vector3 start, Vector3 end)
         {
             lineRenderer.enabled = true;
             lineRenderer.SetPosition(0, start);
             lineRenderer.SetPosition(1, end);
         }
-        
-        public async void FriendsTurn()
-        {
-            var targetEnemy = _enemies.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
-            var targetFriend = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
-            var aimingUnit = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Aiming);
 
-            if (targetEnemy != null && aimingUnit != null)
-            {
-                await FireOrHeal(aimingUnit, targetEnemy);
-            }
-            else if (targetFriend != null && aimingUnit != null)
-            {
-                await FireOrHeal(aimingUnit, targetFriend);
-            }
-            else if (targetFriend != null && targetFriend.Unit.Type == UnitType.Healer && aimingUnit == null)
-            {
-                await FireOrHeal(targetFriend, targetFriend);//self heal
-            }
-        }
-
-        public async void EnemiesTurn()
-        {
-            _enemiesWithLoweredHealth.Clear();
-
-            for (var i = 0; i < _enemies.Count; i++)
-            {
-                var enemy = _enemies[i];
-                enemy.Unit.State = UnitStates.Inactive;
-                if (enemy.Unit.UnitData.health < enemy.Unit.UnitData.maxHealth) 
-                    _enemiesWithLoweredHealth.Add(enemy);
-            }
-
-            var random = Random.Range(0, _enemies.Count);
-            var aimingEnemy = _enemies[random];
-            var typeOfAimingEnemy = aimingEnemy.Unit.Type;
-
-            if (typeOfAimingEnemy == UnitType.Healer)
-            {
-                if (_enemiesWithLoweredHealth.Count == 0)
-                {
-                    EnemiesTurn();
-                    return;
-                }
-                var target = _enemiesWithLoweredHealth[Random.Range(0, _enemiesWithLoweredHealth.Count)];
-                aimingEnemy.Unit.State = UnitStates.Aiming;
-                aimingEnemy.Select();
-                aimingEnemy.UnitViewUpdate();
-                target.Unit.State = UnitStates.Targeted;
-                target.Select();
-                target.UnitViewUpdate();
-                
-                await FireOrHeal(aimingEnemy, target);
-            }
-            else if (typeOfAimingEnemy is UnitType.Tank or UnitType.DamageDealer)
-            {
-                var target = _friends[Random.Range(0, _friends.Count)];
-                aimingEnemy.Unit.State = UnitStates.Aiming;
-                aimingEnemy.Select();
-                aimingEnemy.UnitViewUpdate();
-                target.Unit.State = UnitStates.Targeted;
-                target.Select();
-                target.UnitViewUpdate();
-                
-                await FireOrHeal(aimingEnemy, target);
-            }
-
-            Debug.Log("Enemy made move");
-            
-            NextTurn = false;
-        }
-        
-        private async Task FireOrHeal(UnitView aimingUnit, UnitView targetedUnit)
+        private async Task DamageOrHeal(UnitView aimingUnit, UnitView targetedUnit)
         {
 
             _lineStart = aimingUnit.transform.position;
@@ -228,6 +231,14 @@ namespace View
                 enemy.UnitViewUpdate();
             }
             lineRenderer.enabled = false;
+        }
+        
+        private void OnUnitViewDied(UnitView unitView)
+        {
+            if (!unitView.Unit.IsEnemy)
+                _friends.Remove(unitView);
+            else
+                _enemies.Remove(unitView);
         }
     }
 }

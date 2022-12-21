@@ -2,5 +2,6 @@
   "type" : "1",
   "health" : "100",
   "maxHealth" : "100",
-  "ability" : "0"
+  "ability" : "0",
+  "abilityPower" : "20"
 }

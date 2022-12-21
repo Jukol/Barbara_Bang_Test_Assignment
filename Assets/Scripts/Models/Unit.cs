@@ -1,8 +1,11 @@
+using System;
 using Data;
 namespace Models
 {
     public struct Unit
     {
+        public event Action OnDied;
+        
         public UnitType Type;
         public UnitAbility Ability;
         public Abilities Abilities;
@@ -19,6 +22,7 @@ namespace Models
             Abilities = new Abilities();
             State = UnitStates.Inactive;
             IsEnemy = isEnemy;
+            OnDied = null;
         }
 
         public void TakeDamage(int damage)
@@ -49,14 +53,14 @@ namespace Models
         public void UseAbility(Unit target)
         {
             if (Ability == UnitAbility.Heal)
-                Abilities.Heal(1, target);
+                Abilities.Heal(UnitData.abilityPower, target);
             else if (Ability == UnitAbility.DealDamage) 
-                Abilities.DealDamage(10, target);
+                Abilities.DealDamage(UnitData.abilityPower, target);
         }
 
         public void Die()
         {
-            // Do something
+            OnDied?.Invoke();
         }
     }
 

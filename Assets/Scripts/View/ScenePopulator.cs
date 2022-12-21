@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Data;
 using Infrastructure;
 using Models;
@@ -24,6 +25,9 @@ namespace View
 
         private DependencyInjector _dependencyInjector;
         private UnitInitializer _unitInitializer;
+        
+        private List<UnitView> _friendUnits = new();
+        private List<UnitView> _enemyUnits = new();    
 
 
         public void Init(DependencyInjector dependencyInjector)
@@ -76,6 +80,5 @@ namespace View
             
             battleSystem.Init(friendUnits, enemyUnits);
         }
-
     }
 }

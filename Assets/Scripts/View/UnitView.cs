@@ -7,6 +7,7 @@ namespace View
     public class UnitView : MonoBehaviour
     {
         public event Action<UnitView> OnUnitClicked; 
+        public event Action<UnitView> OnUnitViewDied;
         public Unit Unit;
         
         [SerializeField] private string unitType;
@@ -34,6 +35,7 @@ namespace View
             maxHealth = unit.UnitData.maxHealth;
             primaryAbility = unit.UnitData.ability.ToString();
             stateView = unit.State;
+            Unit.OnDied += OnUnitDied;
             
             _healthBarInitialScaleX = healthBar.transform.localScale.x;
             
@@ -88,6 +90,13 @@ namespace View
             healthBar.transform.localScale = localScale;
 
             healthView.text = health.ToString();
+        }
+        
+        private void OnUnitDied()
+        {
+            Unit.OnDied -= OnUnitDied;
+            Destroy(gameObject);
+            OnUnitViewDied?.Invoke(this);
         }
     }
 }

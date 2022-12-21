@@ -9,5 +9,6 @@ namespace Models
         public int health;
         public int maxHealth;
         public UnitAbility ability;
+        public int abilityPower;
     }
 }
