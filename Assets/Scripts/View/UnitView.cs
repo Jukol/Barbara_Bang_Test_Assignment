@@ -1,5 +1,6 @@
 ﻿using System;
 using Models;
+using TMPro;
 using UnityEngine;
 namespace View
 {
@@ -14,6 +15,8 @@ namespace View
         [SerializeField] private string primaryAbility;
         [SerializeField] private SpriteRenderer selection;
         [SerializeField] private UnitStates stateView;
+        [SerializeField] private TMP_Text titleText;
+        
 
         [SerializeField] private GameObject healthBar;
 
@@ -34,6 +37,8 @@ namespace View
             stateView = unit.State;
             
             _healthBarInitialScaleX = healthBar.transform.localScale.x;
+            
+            titleText.text = unit.UnitData.type.ToString();
             
             UnitViewUpdate();
         }
