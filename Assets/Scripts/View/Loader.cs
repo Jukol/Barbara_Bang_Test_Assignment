@@ -4,7 +4,7 @@ using View;
 
 public class Loader : MonoBehaviour
 {
-    [SerializeField] private UnitViewManager unitViewManager;
+    [SerializeField] private ScenePopulator scenePopulator;
     
     private DependencyInjector _di;
     
@@ -16,6 +16,6 @@ public class Loader : MonoBehaviour
     
     private void Start()
     {
-        unitViewManager.Init(_di);
+        scenePopulator.Init(_di);
     }
 }

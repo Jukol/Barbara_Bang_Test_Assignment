@@ -28,14 +28,7 @@ namespace Models
         private UnitData Deserialize(string jsonPath)
         {
             TextAsset file = Resources.Load<TextAsset>(jsonPath);
-            var unitData = JsonUtility.FromJson<UnitData>(file.text);
-
-            var type = unitData.type;
-            var health = unitData.health;
-            var maxHealth = unitData.maxHealth;
-            var ability = unitData.ability;
-
-            return unitData;
+            return JsonUtility.FromJson<UnitData>(file.text);
         }
     }
 }

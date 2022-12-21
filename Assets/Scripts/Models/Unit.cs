@@ -51,7 +51,7 @@ namespace Models
             if (Ability == UnitAbility.Heal)
                 Abilities.Heal(1, target);
             else if (Ability == UnitAbility.DealDamage) 
-                Abilities.DealDamage(1, target);
+                Abilities.DealDamage(10, target);
         }
 
         public void Die()

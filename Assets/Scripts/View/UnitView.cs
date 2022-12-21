@@ -19,6 +19,8 @@ namespace View
 
         [SerializeField] private SpriteRenderer spriteRenderer;
 
+        private float _healthBarInitialScaleX;
+
         
         public void Init(Unit unit, Color color)
         {
@@ -30,15 +32,16 @@ namespace View
             maxHealth = unit.UnitData.maxHealth;
             primaryAbility = unit.UnitData.ability.ToString();
             stateView = unit.State;
+            
+            _healthBarInitialScaleX = healthBar.transform.localScale.x;
+            
             UnitViewUpdate();
         }
         
         public void UnitViewUpdate()
         {
-            health = Unit.UnitData.health;
-            maxHealth = Unit.UnitData.maxHealth;
             stateView = Unit.State;
-
+            
             if (Unit.State == UnitStates.Aiming)
             {
                 selection.color = Color.yellow;
@@ -64,13 +67,19 @@ namespace View
             stateView = Unit.State;
         }
 
-        private void HandleHealthBar(Unit unit)
+        public void HealthUpdate()
         {
+            health = Unit.UnitData.health;
+            maxHealth = Unit.UnitData.maxHealth;
+
+            float healthPercent = (float) health / maxHealth;
+            float currentHealthView = _healthBarInitialScaleX * healthPercent;
+            
             var localScale = healthBar.transform.localScale;
-            float fullHealthView = localScale.x;
-            float healthPercent = unit.UnitData.health / unit.UnitData.maxHealth;
-            float currentHealthView = fullHealthView * healthPercent;
-            localScale = new Vector3(currentHealthView, localScale.y, localScale.z);
+            var hbY = localScale.y;
+            var hbZ = localScale.z;
+            localScale = new Vector3(currentHealthView, hbY, hbZ);
+            
             healthBar.transform.localScale = localScale;
         }
     }
