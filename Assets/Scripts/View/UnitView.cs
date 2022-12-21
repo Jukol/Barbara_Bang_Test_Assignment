@@ -16,7 +16,7 @@ namespace View
         [SerializeField] private SpriteRenderer selection;
         [SerializeField] private UnitStates stateView;
         [SerializeField] private TMP_Text titleText;
-        
+        [SerializeField] private TMP_Text healthView;
 
         [SerializeField] private GameObject healthBar;
 
@@ -24,7 +24,6 @@ namespace View
 
         private float _healthBarInitialScaleX;
 
-        
         public void Init(Unit unit, Color color)
         {
             Unit = unit;
@@ -39,6 +38,7 @@ namespace View
             _healthBarInitialScaleX = healthBar.transform.localScale.x;
             
             titleText.text = unit.UnitData.type.ToString();
+            healthView.text = health.ToString();
             
             UnitViewUpdate();
         }
@@ -86,6 +86,8 @@ namespace View
             localScale = new Vector3(currentHealthView, hbY, hbZ);
             
             healthBar.transform.localScale = localScale;
+
+            healthView.text = health.ToString();
         }
     }
 }

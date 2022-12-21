@@ -8,6 +8,8 @@ namespace View
 {
     public class BattleSystem : MonoBehaviour
     {
+        public bool NextTurn { get; private set; }
+        
         [SerializeField] private LineRenderer lineRenderer;
         
         private List<UnitView> _friends;
@@ -20,7 +22,8 @@ namespace View
         private Vector2 _lineStart;
         private Vector2 _lineEnd;
         
-        private List<UnitView> _enemiesWithLoweredHealth = new();
+        private readonly List<UnitView> _enemiesWithLoweredHealth = new();
+
         
         public void Init(List<UnitView> friends, List<UnitView> enemies)
         {
@@ -40,8 +43,11 @@ namespace View
             }
         }
 
-        private void OnFriendClicked(UnitView unitView) => 
+        private void OnFriendClicked(UnitView unitView)
+        {
             ChooseUnitOrTarget(unitView);
+            NextTurn = true;
+        }
 
         private void ChooseUnitOrTarget(UnitView unitView)
         {
@@ -91,6 +97,7 @@ namespace View
             DrawLine(_lineStart, _lineEnd);
 
             unitView.UnitViewUpdate();
+            NextTurn = true;
         }
 
         private void GetUnitStatesInfo()
@@ -111,13 +118,16 @@ namespace View
         {
             var targetEnemy = _enemies.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
             var targetFriend = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
-            var activeUnit = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Aiming);
+            var aimingUnit = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Aiming);
 
-            if (targetEnemy != null && activeUnit != null)
-                await FireOrHeal(activeUnit, targetEnemy);
-            else if (targetFriend != null && activeUnit != null) 
-                await FireOrHeal(activeUnit, targetFriend);
-
+            if (targetEnemy != null && aimingUnit != null)
+            {
+                await FireOrHeal(aimingUnit, targetEnemy);
+            }
+            else if (targetFriend != null && aimingUnit != null)
+            {
+                await FireOrHeal(aimingUnit, targetFriend);
+            }
         }
 
         public async void EnemiesTurn()
@@ -145,18 +155,30 @@ namespace View
                 }
                 var target = _enemiesWithLoweredHealth[Random.Range(0, _enemiesWithLoweredHealth.Count)];
                 aimingEnemy.Unit.State = UnitStates.Aiming;
+                aimingEnemy.Select();
+                aimingEnemy.UnitViewUpdate();
                 target.Unit.State = UnitStates.Targeted;
+                target.Select();
+                target.UnitViewUpdate();
                 
                 await FireOrHeal(aimingEnemy, target);
             }
-            else if (typeOfAimingEnemy == UnitType.Tank || typeOfAimingEnemy == UnitType.DamageDealer)
+            else if (typeOfAimingEnemy is UnitType.Tank or UnitType.DamageDealer)
             {
                 var target = _friends[Random.Range(0, _friends.Count)];
                 aimingEnemy.Unit.State = UnitStates.Aiming;
+                aimingEnemy.Select();
+                aimingEnemy.UnitViewUpdate();
                 target.Unit.State = UnitStates.Targeted;
+                target.Select();
+                target.UnitViewUpdate();
                 
                 await FireOrHeal(aimingEnemy, target);
             }
+
+            Debug.Log("Enemy made move");
+            
+            NextTurn = false;
         }
         
         private async Task FireOrHeal(UnitView aimingUnit, UnitView targetedUnit)
