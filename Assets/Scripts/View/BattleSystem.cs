@@ -107,29 +107,17 @@ namespace View
             lineRenderer.SetPosition(1, end);
         }
         
-        public void FriendsTurn()
+        public async void FriendsTurn()
         {
-            var target = _enemies.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
+            var targetEnemy = _enemies.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
+            var targetFriend = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
             var activeUnit = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Aiming);
-            
-            if (target != null && activeUnit != null)
-            {
-                activeUnit.Unit.UseAbility(target.Unit);
-                target.HealthUpdate();
-                lineRenderer.enabled = false;
-                
-                foreach (var friend in _friends)
-                {
-                    friend.Unit.State = UnitStates.Inactive;
-                    friend.Deselect();
-                }
-                
-                foreach (var enemy in _enemies)
-                {
-                    enemy.Unit.State = UnitStates.Inactive;
-                    enemy.Deselect();
-                }
-            }
+
+            if (targetEnemy != null && activeUnit != null)
+                await FireOrHeal(activeUnit, targetEnemy);
+            else if (targetFriend != null && activeUnit != null) 
+                await FireOrHeal(activeUnit, targetFriend);
+
         }
 
         public async void EnemiesTurn()
@@ -171,19 +159,19 @@ namespace View
             }
         }
         
-        private async Task FireOrHeal(UnitView aimingEnemy, UnitView target)
+        private async Task FireOrHeal(UnitView aimingUnit, UnitView targetedUnit)
         {
 
-            _lineStart = aimingEnemy.transform.position;
-            _lineEnd = target.transform.position;
+            _lineStart = aimingUnit.transform.position;
+            _lineEnd = targetedUnit.transform.position;
             DrawLine(_lineStart, _lineEnd);
 
             await Task.Delay(2000);
 
-            aimingEnemy.Unit.UseAbility(target.Unit);
-            aimingEnemy.UnitViewUpdate();
-            target.UnitViewUpdate();
-            target.HealthUpdate();
+            aimingUnit.Unit.UseAbility(targetedUnit.Unit);
+            aimingUnit.UnitViewUpdate();
+            targetedUnit.UnitViewUpdate();
+            targetedUnit.HealthUpdate();
             lineRenderer.enabled = false;
 
             foreach (var friend in _friends)
