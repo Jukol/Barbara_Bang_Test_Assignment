@@ -55,7 +55,7 @@ namespace View
 
             if ((_anyAimingFriend && _anyTargetedFriend) || _anyTargetedEnemy) return;
 
-            if (unitView.Unit.State == UnitStates.Inactive)
+            if (unitView.Unit.State is UnitStates.Inactive or UnitStates.Aiming);
             {
                 if (_anyAimingFriend)
                 {
@@ -127,6 +127,10 @@ namespace View
             else if (targetFriend != null && aimingUnit != null)
             {
                 await FireOrHeal(aimingUnit, targetFriend);
+            }
+            else if (targetFriend != null && targetFriend.Unit.Type == UnitType.Healer && aimingUnit == null)
+            {
+                await FireOrHeal(targetFriend, targetFriend);//self heal
             }
         }
 
