@@ -24,6 +24,8 @@ namespace View
         
         private readonly List<UnitView> _enemiesWithLoweredHealth = new();
 
+#region Public Methods
+
         public void Init(List<UnitView> friends, List<UnitView> enemies)
         {
             _friends = friends;
@@ -51,17 +53,11 @@ namespace View
             var aimingUnit = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Aiming);
 
             if (targetEnemy != null && aimingUnit != null)
-            {
                 await DamageOrHeal(aimingUnit, targetEnemy);
-            }
             else if (targetFriend != null && aimingUnit != null)
-            {
                 await DamageOrHeal(aimingUnit, targetFriend);
-            }
-            else if (targetFriend != null && targetFriend.Unit.Type == UnitType.Healer && aimingUnit == null)
-            {
-                await DamageOrHeal(targetFriend, targetFriend);//self heal
-            }
+            else if (targetFriend != null && targetFriend.Unit.Type == UnitType.Healer && aimingUnit == null) 
+                await DamageOrHeal(targetFriend, targetFriend); //self heal
         }
 
         public async void EnemiesTurn()
@@ -104,11 +100,30 @@ namespace View
                 
                 await DamageOrHeal(aimingEnemy, target);
             }
-
-            Debug.Log("Enemy made move");
             
             NextTurn = false;
         }
+        
+        public void ResetAll()
+        {
+            foreach (var friend in _friends)
+            {
+                friend.Unit.State = UnitStates.Inactive;
+                friend.Deselect();
+                friend.UnitViewUpdate();
+            }
+            foreach (var enemy in _enemies)
+            {
+                enemy.Unit.State = UnitStates.Inactive;
+                enemy.Deselect();
+                enemy.UnitViewUpdate();
+            }
+            lineRenderer.enabled = false;
+        }
+
+#endregion
+
+#region Private Methods
 
         private void ChangeStateAndUpdate(UnitView unitView, UnitStates state)
         {
@@ -198,9 +213,11 @@ namespace View
             await Task.Delay(2000);
 
             aimingUnit.Unit.UseAbility(targetedUnit.Unit);
+            
             aimingUnit.UnitViewUpdate();
             targetedUnit.UnitViewUpdate();
             targetedUnit.HealthUpdate();
+
             lineRenderer.enabled = false;
 
             foreach (var friend in _friends)
@@ -216,23 +233,6 @@ namespace View
             }
         }
 
-        public void ResetAll()
-        {
-            foreach (var friend in _friends)
-            {
-                friend.Unit.State = UnitStates.Inactive;
-                friend.Deselect();
-                friend.UnitViewUpdate();
-            }
-            foreach (var enemy in _enemies)
-            {
-                enemy.Unit.State = UnitStates.Inactive;
-                enemy.Deselect();
-                enemy.UnitViewUpdate();
-            }
-            lineRenderer.enabled = false;
-        }
-        
         private void OnUnitViewDied(UnitView unitView)
         {
             if (!unitView.Unit.IsEnemy)
@@ -240,5 +240,8 @@ namespace View
             else
                 _enemies.Remove(unitView);
         }
+
+#endregion
+        
     }
 }
