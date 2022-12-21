@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Data;
 using Models;
 using UnityEngine;
 namespace View
@@ -17,6 +18,8 @@ namespace View
         
         private Vector2 _lineStart;
         private Vector2 _lineEnd;
+        
+        private List<UnitView> _enemiesWithLoweredHealth = new();
         
         public void Init(List<UnitView> friends, List<UnitView> enemies)
         {
@@ -112,6 +115,38 @@ namespace View
             {
                 activeUnit.Unit.UseAbility(target.Unit);
                 target.HealthUpdate();
+            }
+        }
+
+        private void EnemiesTurn()
+        {
+            _enemiesWithLoweredHealth.Clear();
+
+            for (var i = 0; i < _enemies.Count; i++)
+            {
+                var enemy = _enemies[i];
+                enemy.Unit.State = UnitStates.Inactive;
+                if (enemy.Unit.UnitData.health < enemy.Unit.UnitData.maxHealth) 
+                    _enemiesWithLoweredHealth.Add(enemy);
+            }
+
+            var random = Random.Range(0, _enemies.Count);
+            var aimingEnemy = _enemies[random];
+            var typeOfAimingEnemy = aimingEnemy.Unit.Type;
+
+            if (typeOfAimingEnemy == UnitType.Healer)
+            {
+                var target = _enemiesWithLoweredHealth[Random.Range(0, _enemiesWithLoweredHealth.Count)];
+                aimingEnemy.Unit.State = UnitStates.Aiming;
+                target.Unit.State = UnitStates.Targeted;
+                aimingEnemy.Unit.UseAbility(target.Unit);
+            }
+            else if (typeOfAimingEnemy == UnitType.Tank || typeOfAimingEnemy == UnitType.DamageDealer)
+            {
+                var target = _friends[Random.Range(0, _friends.Count)];
+                aimingEnemy.Unit.State = UnitStates.Aiming;
+                target.Unit.State = UnitStates.Targeted;
+                aimingEnemy.Unit.UseAbility(target.Unit);
             }
         }
 
