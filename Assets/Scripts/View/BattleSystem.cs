@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Data;
 using Models;
 using UnityEngine;
@@ -115,10 +116,23 @@ namespace View
             {
                 activeUnit.Unit.UseAbility(target.Unit);
                 target.HealthUpdate();
+                lineRenderer.enabled = false;
+                
+                foreach (var friend in _friends)
+                {
+                    friend.Unit.State = UnitStates.Inactive;
+                    friend.Deselect();
+                }
+                
+                foreach (var enemy in _enemies)
+                {
+                    enemy.Unit.State = UnitStates.Inactive;
+                    enemy.Deselect();
+                }
             }
         }
 
-        private void EnemiesTurn()
+        public async void EnemiesTurn()
         {
             _enemiesWithLoweredHealth.Clear();
 
@@ -136,17 +150,68 @@ namespace View
 
             if (typeOfAimingEnemy == UnitType.Healer)
             {
+                if (_enemiesWithLoweredHealth.Count == 0)
+                {
+                    EnemiesTurn();
+                    return;
+                }
                 var target = _enemiesWithLoweredHealth[Random.Range(0, _enemiesWithLoweredHealth.Count)];
                 aimingEnemy.Unit.State = UnitStates.Aiming;
                 target.Unit.State = UnitStates.Targeted;
+                
+                _lineStart = aimingEnemy.transform.position;
+                _lineEnd = target.transform.position;
+                DrawLine(_lineStart, _lineEnd);
+
+                await Task.Delay(2000);
+
                 aimingEnemy.Unit.UseAbility(target.Unit);
+                aimingEnemy.UnitViewUpdate();
+                target.UnitViewUpdate();
+                target.HealthUpdate();
+                lineRenderer.enabled = false;
+                
+                foreach (var friend in _friends)
+                {
+                    friend.Unit.State = UnitStates.Inactive;
+                    friend.Deselect();
+                }
+                
+                foreach (var enemy in _enemies)
+                {
+                    enemy.Unit.State = UnitStates.Inactive;
+                    enemy.Deselect();
+                }
             }
             else if (typeOfAimingEnemy == UnitType.Tank || typeOfAimingEnemy == UnitType.DamageDealer)
             {
                 var target = _friends[Random.Range(0, _friends.Count)];
                 aimingEnemy.Unit.State = UnitStates.Aiming;
                 target.Unit.State = UnitStates.Targeted;
+                
+                _lineStart = aimingEnemy.transform.position;
+                _lineEnd = target.transform.position;
+                DrawLine(_lineStart, _lineEnd);
+
+                await Task.Delay(2000);
+                
                 aimingEnemy.Unit.UseAbility(target.Unit);
+                aimingEnemy.UnitViewUpdate();
+                target.UnitViewUpdate();
+                target.HealthUpdate();
+                lineRenderer.enabled = false;
+                
+                foreach (var friend in _friends)
+                {
+                    friend.Unit.State = UnitStates.Inactive;
+                    friend.Deselect();
+                }
+                
+                foreach (var enemy in _enemies)
+                {
+                    enemy.Unit.State = UnitStates.Inactive;
+                    enemy.Deselect();
+                }
             }
         }
 
