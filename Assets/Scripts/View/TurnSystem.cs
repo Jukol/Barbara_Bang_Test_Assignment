@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 
 namespace View
@@ -9,12 +8,23 @@ namespace View
         [SerializeField] private BattleSystem battleSystem;
         [SerializeField] private GameObject popup;
         [SerializeField] private GameObject turnInfo;
+        [SerializeField] private GameObject winPopup;
+        [SerializeField] private GameObject losePopup;
+
+        private bool _gameOver;
 
         private void Awake()
         {
+            battleSystem.OnWin += OnWin;
+            battleSystem.OnLose += OnLose;
             turnInfo.SetActive(true);
         }
+        
+        private void OnWin() => 
+            winPopup.SetActive(true);
 
+        private void OnLose() => 
+            losePopup.SetActive(true);
 
         public async void OnTurnButton()
         {
@@ -22,10 +32,12 @@ namespace View
             
             if (battleSystem.NextTurn)
             {
+                if (_gameOver) return;
                 battleSystem.FriendsTurn();
                 
                 await Task.Delay(3000);
-                
+
+                if (_gameOver) return;
                 battleSystem.EnemiesTurn(() => turnInfo.SetActive(true));
             }
             
@@ -33,7 +45,10 @@ namespace View
                 ShowPopup();
         }
         
-        private void ShowPopup() => 
+        private void ShowPopup()
+        {
+            _gameOver = true;
             popup.SetActive(true);
+        }
     }
 }

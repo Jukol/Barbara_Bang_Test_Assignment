@@ -10,6 +10,11 @@ namespace View
 {
     public class BattleSystem : MonoBehaviour
     {
+        private bool _gameOver;
+        
+        public event Action OnWin;
+        public event Action OnLose;
+        
         public bool NextTurn { get; private set; }
         
         [SerializeField] private LineRenderer lineRenderer;
@@ -50,6 +55,8 @@ namespace View
 
         public async void FriendsTurn(Action onTurnEnd = null)
         {
+            if (_gameOver) return;
+            
             var targetEnemy = _enemies.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
             var targetFriend = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
             var aimingFriend = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Aiming);
@@ -66,6 +73,8 @@ namespace View
 
         public async void EnemiesTurn(Action onTurnEnd = null)
         {
+            if (_gameOver) return;
+            
             _enemiesWithLoweredHealth.Clear();
 
             for (var i = 0; i < _enemies.Count; i++)
@@ -241,9 +250,28 @@ namespace View
         private void OnUnitViewDied(UnitView unitView)
         {
             if (!unitView.Unit.IsEnemy)
+            {
                 _friends.Remove(unitView);
+                if (_friends.Count == 0)
+                {
+                    _gameOver = true;
+                    OnLose?.Invoke();
+                }
+            }
             else
+            {
                 _enemies.Remove(unitView);
+                if (_enemies.Count == 0)
+                {
+                    _gameOver = true;
+                    OnWin?.Invoke();
+                }
+            }
+        }
+
+        private void OnDisable()
+        {
+            throw new NotImplementedException();
         }
 
 #endregion

@@ -1,7 +1,7 @@
 {
   "type" : "1",
-  "health" : "100",
-  "maxHealth" : "100",
+  "health" : "80",
+  "maxHealth" : "80",
   "ability" : "0",
-  "abilityPower" : "20"
+  "abilityPower" : "40"
 }
