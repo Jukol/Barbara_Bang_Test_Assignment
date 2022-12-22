@@ -91,9 +91,17 @@ namespace View
 
             if (typeOfAimingEnemy == UnitType.Healer)
             {
-                if (_enemiesWithLoweredHealth.Count == 0)
+                if (_enemiesWithLoweredHealth.Count == 0 && _enemies.Count > 1)
                 {
                     EnemiesTurn();
+                    return;
+                }
+                
+                if (_enemies.Count == 1)
+                {
+                    aimingEnemy.Unit.State = UnitStates.Aiming;
+                    await DamageOrHeal(aimingEnemy, aimingEnemy);
+                    onTurnEnd?.Invoke();
                     return;
                 }
                 
@@ -267,11 +275,6 @@ namespace View
                     OnWin?.Invoke();
                 }
             }
-        }
-
-        private void OnDisable()
-        {
-            throw new NotImplementedException();
         }
 
 #endregion

@@ -48,6 +48,7 @@ namespace View
         private void ShowPopup()
         {
             _gameOver = true;
+            turnInfo.SetActive(false);
             popup.SetActive(true);
         }
     }
