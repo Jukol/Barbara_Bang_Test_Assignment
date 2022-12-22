@@ -8,9 +8,10 @@ namespace View
     
         private Camera _camera;
 
-        private void Awake()
+        public void Init(Color color)
         {
             _camera = Camera.main;
+            spriteRenderer.color = color;
             ResizeByScreen(_camera);
         }
     

@@ -15,7 +15,7 @@ namespace Models
         public List<Unit> Friends;
         public List<Unit> Enemies;
         
-        public void Initialize()
+        public void Initialize(int level)
         {
             _unitCreator = _dependencyInjector.Resolve<UnitCreator>();
 
@@ -29,13 +29,13 @@ namespace Models
             else
                 Enemies = new List<Unit>();
             
-            Friends.Add(_unitCreator.CreateUnit(UnitType.Tank, false));
-            Friends.Add(_unitCreator.CreateUnit(UnitType.DamageDealer, false));
-            Friends.Add(_unitCreator.CreateUnit(UnitType.Healer, false));
+            Friends.Add(_unitCreator.CreateUnit(UnitType.Tank, false, level));
+            Friends.Add(_unitCreator.CreateUnit(UnitType.DamageDealer, false, level));
+            Friends.Add(_unitCreator.CreateUnit(UnitType.Healer, false, level));
             
-            Enemies.Add(_unitCreator.CreateUnit(UnitType.Tank, true));
-            Enemies.Add(_unitCreator.CreateUnit(UnitType.DamageDealer, true));
-            Enemies.Add(_unitCreator.CreateUnit(UnitType.Healer, true));
+            Enemies.Add(_unitCreator.CreateUnit(UnitType.Tank, true, level));
+            Enemies.Add(_unitCreator.CreateUnit(UnitType.DamageDealer, true, level));
+            Enemies.Add(_unitCreator.CreateUnit(UnitType.Healer, true, level));
         }
     }
 }

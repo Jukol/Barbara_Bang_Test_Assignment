@@ -1,0 +1,31 @@
+{
+	"unitDataByLevels" : [
+					{
+						"name" : "Healer",
+						"level" : "1",
+						"type" : "2",
+						"health" : "100",
+						"maxHealth" : "100",
+						"ability" : "1",
+						"abilityPower" : "20"
+					},
+					{
+						"name" : "Healer",
+						"level" : "2",
+						"type" : "2",
+						"health" : "110",
+						"maxHealth" : "110",
+						"ability" : "1",
+						"abilityPower" : "30"
+					},
+					{
+						"name" : "Healer",
+						"level" : "3",
+						"type" : "2",
+						"health" : "120",
+						"maxHealth" : "120",
+						"ability" : "1",
+						"abilityPower" : "40"
+					}	
+  				]
+}

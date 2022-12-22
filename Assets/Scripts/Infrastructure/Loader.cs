@@ -6,8 +6,10 @@ namespace Infrastructure
     public class Loader : MonoBehaviour
     {
         [SerializeField] private ScenePopulator scenePopulator;
-    
+        [SerializeField] private GameObject levelSelector;
+
         private DependencyInjector _di;
+        private int _currentLevel;
     
         private void Awake()
         {
@@ -17,12 +19,26 @@ namespace Infrastructure
     
         private void Start()
         {
-            StartGame();
+            levelSelector.SetActive(true);
         }
 
-        public void StartGame()
+        public void StartGame(int level)
         {
-            scenePopulator.Init(_di);
+            _currentLevel = level;
+            levelSelector.SetActive(false);
+            scenePopulator.Init(_di, level);
+        }
+
+        public void StartOver()
+        {
+            levelSelector.SetActive(false);
+            scenePopulator.Init(_di, _currentLevel);
+        }
+
+        public void StartNext()
+        {
+            levelSelector.SetActive(false);
+            scenePopulator.Init(_di, _currentLevel + 1);
         }
     }
 }

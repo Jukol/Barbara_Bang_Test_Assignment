@@ -1,0 +1,31 @@
+{
+  "unitDataByLevels" : [
+				{
+					"name" : "Damage Dealer",
+					"level" : "1",
+					"type" : "1",
+					"health" : "80",
+					"maxHealth" : "80",
+					"ability" : "0",
+					"abilityPower" : "40"
+				},
+				{
+					"name" : "Damage Dealer",
+					"level" : "2",
+					"type" : "1",
+					"health" : "90",
+					"maxHealth" : "90",
+					"ability" : "0",
+					"abilityPower" : "50"
+				},
+				{
+					"name" : "Damage Dealer",
+					"level" : "3",
+					"type" : "1",
+					"health" : "100",
+					"maxHealth" : "100",
+					"ability" : "0",
+					"abilityPower" : "60"
+				}	
+  			]
+}

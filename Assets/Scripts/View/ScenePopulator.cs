@@ -21,6 +21,9 @@ namespace View
         [SerializeField] private Transform enemyDamageDealerPosition;
         [SerializeField] private Transform enemyHealerPosition;
 
+        [SerializeField] private Field field;
+        [SerializeField] private Color[] fieldColors;
+
         [SerializeField] private BattleSystem battleSystem;
 
         private DependencyInjector _dependencyInjector;
@@ -30,11 +33,13 @@ namespace View
         private List<UnitView> _enemyUnits = new();    
 
 
-        public void Init(DependencyInjector dependencyInjector)
+        public void Init(DependencyInjector dependencyInjector, int level)
         {
             _dependencyInjector = dependencyInjector;
             _unitInitializer = _dependencyInjector.Resolve<UnitInitializer>();
-            _unitInitializer.Initialize();
+            _unitInitializer.Initialize(level);
+            
+            field.Init(fieldColors[level]);
             
             PopulateScene();
         }
