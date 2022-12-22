@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace View
@@ -7,16 +8,25 @@ namespace View
     {
         [SerializeField] private BattleSystem battleSystem;
         [SerializeField] private GameObject popup;
-        
+        [SerializeField] private GameObject turnInfo;
+
+        private void Awake()
+        {
+            turnInfo.SetActive(true);
+        }
+
+
         public async void OnTurnButton()
         {
+            turnInfo.SetActive(false);
+            
             if (battleSystem.NextTurn)
             {
                 battleSystem.FriendsTurn();
                 
                 await Task.Delay(3000);
                 
-                battleSystem.EnemiesTurn();
+                battleSystem.EnemiesTurn(() => turnInfo.SetActive(true));
             }
             
             else

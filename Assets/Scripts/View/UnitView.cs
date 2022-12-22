@@ -48,15 +48,11 @@ namespace View
         public void UnitViewUpdate()
         {
             stateView = Unit.State;
-            
+
             if (Unit.State == UnitStates.Aiming)
-            {
                 selection.color = Color.yellow;
-            }
-            else if (Unit.State == UnitStates.Targeted)
-            {
+            else if (Unit.State == UnitStates.Targeted) 
                 selection.color = Color.red;
-            }
         }
 
         private void OnMouseDown() => 

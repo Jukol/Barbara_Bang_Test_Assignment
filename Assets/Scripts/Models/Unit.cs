@@ -2,7 +2,7 @@ using System;
 using Data;
 namespace Models
 {
-    public struct Unit
+    public class Unit
     {
         public event Action OnDied;
         
@@ -12,7 +12,7 @@ namespace Models
         public bool IsEnemy;
         public UnitStates State;
         
-        public readonly UnitData UnitData;
+        public UnitData UnitData;
 
         public Unit(UnitData unitData, bool isEnemy)
         {

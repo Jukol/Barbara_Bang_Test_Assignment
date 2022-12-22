@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Models;
 using UnityEngine;
+using Random = UnityEngine.Random;
 namespace View
 {
     public class BattleSystem : MonoBehaviour
@@ -46,21 +48,23 @@ namespace View
             }
         }
 
-        public async void FriendsTurn()
+        public async void FriendsTurn(Action onTurnEnd = null)
         {
             var targetEnemy = _enemies.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
             var targetFriend = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Targeted);
-            var aimingUnit = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Aiming);
+            var aimingFriend = _friends.FirstOrDefault(x => x.Unit.State == UnitStates.Aiming);
 
-            if (targetEnemy != null && aimingUnit != null)
-                await DamageOrHeal(aimingUnit, targetEnemy);
-            else if (targetFriend != null && aimingUnit != null)
-                await DamageOrHeal(aimingUnit, targetFriend);
-            else if (targetFriend != null && targetFriend.Unit.Type == UnitType.Healer && aimingUnit == null) 
+            if (targetEnemy != null && aimingFriend != null)
+                await DamageOrHeal(aimingFriend, targetEnemy);
+            else if (targetFriend != null && aimingFriend != null)
+                await DamageOrHeal(aimingFriend, targetFriend);
+            else if (targetFriend != null && targetFriend.Unit.Type == UnitType.Healer && aimingFriend == null) 
                 await DamageOrHeal(targetFriend, targetFriend); //self heal
+            
+            onTurnEnd?.Invoke();
         }
 
-        public async void EnemiesTurn()
+        public async void EnemiesTurn(Action onTurnEnd = null)
         {
             _enemiesWithLoweredHealth.Clear();
 
@@ -101,6 +105,7 @@ namespace View
                 await DamageOrHeal(aimingEnemy, target);
             }
             
+            onTurnEnd?.Invoke();
             NextTurn = false;
         }
         
