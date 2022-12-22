@@ -10,8 +10,8 @@ namespace View
     public class ScenePopulator : MonoBehaviour
     {
         [SerializeField] private UnitView unitPrefab;
-        [SerializeField] private Transform friends;
-        [SerializeField] private Transform enemies;
+        [SerializeField] private Transform friendUnits;
+        [SerializeField] private Transform enemyUnits;
         
         [SerializeField] private Transform friendTankPosition;
         [SerializeField] private Transform friendDamageDealerPosition;
@@ -41,12 +41,11 @@ namespace View
 
         private void PopulateScene()
         {
-            List<UnitView> friendUnits = new();
-            List<UnitView> enemyUnits = new();    
+            ClearScene();
             
             foreach (var friend in _unitInitializer.Friends)
             {
-                var unitView = Instantiate(unitPrefab, friends);
+                var unitView = Instantiate(unitPrefab, friendUnits);
                 unitView.Init(friend, Color.green);
 
                 var unitTransform = unitView.transform;
@@ -58,12 +57,12 @@ namespace View
                     _ => unitTransform.position
                 };
 
-                friendUnits.Add(unitView);
+                _friendUnits.Add(unitView);
             }
             
             foreach (var enemy in _unitInitializer.Enemies)
             {
-                var unitView = Instantiate(unitPrefab, enemies);
+                var unitView = Instantiate(unitPrefab, enemyUnits);
                 unitView.Init(enemy, Color.blue);
                 
                 var unitTransform = unitView.transform;
@@ -75,10 +74,19 @@ namespace View
                     _ => unitTransform.position
                 };
                 
-                enemyUnits.Add(unitView);
+                _enemyUnits.Add(unitView);
             }
             
-            battleSystem.Init(friendUnits, enemyUnits);
+            battleSystem.Init(_friendUnits, _enemyUnits);
+        }
+
+        private void ClearScene()
+        {
+            foreach (var friend in _friendUnits) Destroy(friend.gameObject);
+            foreach (var enemy in _enemyUnits) Destroy(enemy.gameObject);
+
+            _friendUnits.Clear();
+            _enemyUnits.Clear();
         }
     }
 }

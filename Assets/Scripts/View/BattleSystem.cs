@@ -35,6 +35,8 @@ namespace View
 
         public void Init(List<UnitView> friends, List<UnitView> enemies)
         {
+            _gameOver = false;
+            
             _friends = friends;
             _enemies = enemies;
 

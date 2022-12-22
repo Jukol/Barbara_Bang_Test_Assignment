@@ -19,19 +19,23 @@ namespace Models
         {
             _unitCreator = _dependencyInjector.Resolve<UnitCreator>();
 
-            Friends = new List<Unit>()
-            {
-                _unitCreator.CreateUnit(UnitType.Tank, false),
-                _unitCreator.CreateUnit(UnitType.DamageDealer, false),
-                _unitCreator.CreateUnit(UnitType.Healer, false)
-            };
+            if (Friends != null)
+                Friends.Clear();
+            else
+                Friends = new List<Unit>();
+
+            if (Enemies != null)
+                Enemies.Clear();
+            else
+                Enemies = new List<Unit>();
             
-            Enemies = new List<Unit>()
-            {
-                _unitCreator.CreateUnit(UnitType.Tank, true),
-                _unitCreator.CreateUnit(UnitType.DamageDealer, true),
-                _unitCreator.CreateUnit(UnitType.Healer, true)
-            };
+            Friends.Add(_unitCreator.CreateUnit(UnitType.Tank, false));
+            Friends.Add(_unitCreator.CreateUnit(UnitType.DamageDealer, false));
+            Friends.Add(_unitCreator.CreateUnit(UnitType.Healer, false));
+            
+            Enemies.Add(_unitCreator.CreateUnit(UnitType.Tank, true));
+            Enemies.Add(_unitCreator.CreateUnit(UnitType.DamageDealer, true));
+            Enemies.Add(_unitCreator.CreateUnit(UnitType.Healer, true));
         }
     }
 }

@@ -17,6 +17,11 @@ namespace Infrastructure
     
         private void Start()
         {
+            StartGame();
+        }
+
+        public void StartGame()
+        {
             scenePopulator.Init(_di);
         }
     }
