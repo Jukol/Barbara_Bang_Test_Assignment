@@ -9,13 +9,10 @@ namespace View
         public event Action<UnitView> OnUnitClicked; 
         public event Action<UnitView> OnUnitViewDied;
         public Unit Unit;
-        
-        [SerializeField] private string unitType;
+
         [SerializeField] private int health;
         [SerializeField] private int maxHealth;
-        [SerializeField] private string primaryAbility;
         [SerializeField] private SpriteRenderer selection;
-        [SerializeField] private UnitStates stateView;
         [SerializeField] private TMP_Text titleText;
         [SerializeField] private TMP_Text healthView;
 
@@ -30,11 +27,9 @@ namespace View
             Unit = unit;
             spriteRenderer.color = color;
             
-            unitType = unit.Type.ToString();
             health = unit.UnitData.health;
             maxHealth = unit.UnitData.maxHealth;
-            primaryAbility = unit.UnitData.ability.ToString();
-            stateView = unit.State;
+            
             Unit.OnDied += OnUnitDied;
             
             _healthBarInitialScaleX = healthBar.transform.localScale.x;
@@ -47,7 +42,6 @@ namespace View
         
         public void UnitViewUpdate()
         {
-            stateView = Unit.State;
 
             if (Unit.State == UnitStates.Aiming)
                 selection.color = Color.yellow;
@@ -67,7 +61,6 @@ namespace View
         {
             selection.gameObject.SetActive(false);
             Unit.State = UnitStates.Inactive;
-            stateView = Unit.State;
         }
 
         public void HealthUpdate()

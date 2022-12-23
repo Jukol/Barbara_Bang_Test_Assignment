@@ -56,7 +56,7 @@ namespace View
             }
         }
 
-        public async void FriendsTurn(Action onTurnEnd = null)
+        public async void FriendAction(Action onTurnEnd = null)
         {
             if (_gameOver) return;
             
@@ -74,7 +74,7 @@ namespace View
             onTurnEnd?.Invoke();
         }
 
-        public async void EnemiesTurn(Action onTurnEnd = null)
+        public async void EnemyAction(Action onTurnEnd = null)
         {
             if (_gameOver) return;
             
@@ -96,7 +96,7 @@ namespace View
             {
                 if (_enemiesWithLoweredHealth.Count == 0 && _enemies.Count > 1)
                 {
-                    EnemiesTurn();
+                    EnemyAction();
                     return;
                 }
                 

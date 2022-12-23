@@ -21,15 +21,11 @@ namespace View
             turnInfo.SetActive(true);
         }
         
-        private void OnWin()
-        {
+        private void OnWin() => 
             winPopup.gameObject.SetActive(true);
-        }
 
-        private void OnLose()
-        {
+        private void OnLose() => 
             losePopup.gameObject.SetActive(true);
-        }
 
         public async void OnTurnButton()
         {
@@ -41,12 +37,12 @@ namespace View
                 if (battleSystem.NextTurn)
                 {
                     if (_gameOver) return;
-                    battleSystem.FriendsTurn();
+                    battleSystem.FriendAction();
                 
                     await Task.Delay(3000);
 
                     if (_gameOver) return;
-                    battleSystem.EnemiesTurn(() => turnInfo.SetActive(true));
+                    battleSystem.EnemyAction(() => turnInfo.SetActive(true));
                                     
                     _turnButtonPressed = false;
                 }

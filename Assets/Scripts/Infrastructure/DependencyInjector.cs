@@ -5,7 +5,7 @@ namespace Infrastructure
 {
     public class DependencyInjector
     {
-        private Dictionary<Type, object> _dependencies;
+        private readonly Dictionary<Type, object> _dependencies;
 
         public DependencyInjector() => 
             _dependencies = new Dictionary<Type, object>();

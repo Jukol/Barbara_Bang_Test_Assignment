@@ -5,7 +5,7 @@ namespace Models
 {
     public class UnitInitializer
     {
-        private DependencyInjector _dependencyInjector;
+        private readonly DependencyInjector _dependencyInjector;
         
         public UnitInitializer(DependencyInjector dependencyInjector) => 
             _dependencyInjector = dependencyInjector;
