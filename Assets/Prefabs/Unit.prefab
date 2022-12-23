@@ -119,8 +119,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.918, y: 0.021}
-  m_SizeDelta: {x: 2.5389, y: 0.401}
+  m_AnchoredPosition: {x: 0.025, y: 1.522}
+  m_SizeDelta: {x: 1, y: 0.2773}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &901208231420775634
 MeshRenderer:
@@ -215,10 +215,10 @@ MonoBehaviour:
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 3.1
+  m_fontSizeMin: 2
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -358,12 +358,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb2876a878364da6abd0792eb5bb7ca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitType: 
   health: 0
   maxHealth: 0
-  primaryAbility: 
   selection: {fileID: 7700472897366654508}
-  stateView: 0
   titleText: {fileID: 911780499100279351}
   healthView: {fileID: 4482701560672392554}
   healthBar: {fileID: 3237978458348677697}

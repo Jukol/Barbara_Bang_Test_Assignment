@@ -279,6 +279,21 @@ namespace View
             }
         }
 
+        private void OnDisable()
+        {
+            foreach (var friend in _friends)
+            {
+                friend.OnUnitClicked -= OnFriendClicked;
+                friend.OnUnitViewDied -= OnUnitViewDied;
+            }
+
+            foreach (var enemy in _enemies)
+            {
+                enemy.OnUnitClicked -= OnEnemyClicked;
+                enemy.OnUnitViewDied -= OnUnitViewDied;
+            }
+        }
+
 #endregion
         
     }

@@ -28,8 +28,8 @@ namespace View
         private DependencyInjector _dependencyInjector;
         private UnitInitializer _unitInitializer;
         
-        private List<UnitView> _friendUnits = new();
-        private List<UnitView> _enemyUnits = new();    
+        private readonly List<UnitView> _friendUnits = new();
+        private readonly List<UnitView> _enemyUnits = new();    
 
 
         public void Init(DependencyInjector dependencyInjector, int level)
