@@ -16,7 +16,6 @@ namespace View
             StartCoroutine(Flash());
         }
 
-
         private IEnumerator Flash()
         {
             while (true)

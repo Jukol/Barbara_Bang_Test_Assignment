@@ -10,11 +10,5 @@ namespace Models
 
         public void Heal(int heal, Unit target) => 
             target.Heal(heal);
-
-        public void Buff(int buff, Unit target) => 
-            target.Buff(buff);
-
-        public void Debuff(int debuff, Unit target) => 
-            target.Debuff(debuff);
     }
 }
