@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 namespace Infrastructure
 {
     public class Bootstrapper : MonoBehaviour
@@ -13,7 +14,7 @@ namespace Infrastructure
             
             DontDestroyOnLoad(gameObject);
             
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(1);
         }
     }
 }

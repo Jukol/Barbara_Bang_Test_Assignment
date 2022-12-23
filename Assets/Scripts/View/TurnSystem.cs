@@ -8,10 +8,11 @@ namespace View
         [SerializeField] private BattleSystem battleSystem;
         [SerializeField] private GameObject popup;
         [SerializeField] private GameObject turnInfo;
-        [SerializeField] private GameObject winPopup;
-        [SerializeField] private GameObject losePopup;
+        [SerializeField] private Popup winPopup;
+        [SerializeField] private Popup losePopup;
 
         private bool _gameOver;
+        private bool _turnButtonPressed;
 
         private void Awake()
         {
@@ -20,29 +21,39 @@ namespace View
             turnInfo.SetActive(true);
         }
         
-        private void OnWin() => 
-            winPopup.SetActive(true);
+        private void OnWin()
+        {
+            winPopup.gameObject.SetActive(true);
+        }
 
-        private void OnLose() => 
-            losePopup.SetActive(true);
+        private void OnLose()
+        {
+            losePopup.gameObject.SetActive(true);
+        }
 
         public async void OnTurnButton()
         {
-            turnInfo.SetActive(false);
-            
-            if (battleSystem.NextTurn)
+            if (!_turnButtonPressed)
             {
-                if (_gameOver) return;
-                battleSystem.FriendsTurn();
-                
-                await Task.Delay(3000);
-
-                if (_gameOver) return;
-                battleSystem.EnemiesTurn(() => turnInfo.SetActive(true));
-            }
+                _turnButtonPressed = true;
+                turnInfo.SetActive(false);
             
-            else
-                ShowPopup();
+                if (battleSystem.NextTurn)
+                {
+                    if (_gameOver) return;
+                    battleSystem.FriendsTurn();
+                
+                    await Task.Delay(3000);
+
+                    if (_gameOver) return;
+                    battleSystem.EnemiesTurn(() => turnInfo.SetActive(true));
+                                    
+                    _turnButtonPressed = false;
+                }
+            
+                else
+                    ShowPopup();
+            }
         }
         
         private void ShowPopup()

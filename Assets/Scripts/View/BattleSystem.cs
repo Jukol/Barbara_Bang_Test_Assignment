@@ -6,6 +6,7 @@ using Data;
 using Models;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
 namespace View
 {
     public class BattleSystem : MonoBehaviour
@@ -99,9 +100,9 @@ namespace View
                     return;
                 }
                 
-                if (_enemies.Count == 1)
+                if (_enemies.Count == 1) //self heal
                 {
-                    aimingEnemy.Unit.State = UnitStates.Aiming;
+                    ChangeStateAndUpdate(aimingEnemy, UnitStates.Targeted);
                     await DamageOrHeal(aimingEnemy, aimingEnemy);
                     onTurnEnd?.Invoke();
                     return;
@@ -184,13 +185,13 @@ namespace View
 
             if ((_anyAimingFriend && _anyTargetedFriend) || _anyTargetedEnemy) return;
 
-            if (unitView.Unit.State is UnitStates.Inactive or UnitStates.Aiming);
+            if (unitView.Unit.State is UnitStates.Inactive or UnitStates.Aiming)
             {
                 if (_anyAimingFriend)
                 {
                     unitView.Unit.State = UnitStates.Targeted;
                         
-                    _lineEnd = unitView.transform.position; ;
+                    _lineEnd = unitView.transform.position; 
                     DrawLine(_lineStart, _lineEnd);
                     
                     unitView.Select();
@@ -229,7 +230,6 @@ namespace View
 
         private async Task DamageOrHeal(UnitView aimingUnit, UnitView targetedUnit)
         {
-
             _lineStart = aimingUnit.transform.position;
             _lineEnd = targetedUnit.transform.position;
             DrawLine(_lineStart, _lineEnd);

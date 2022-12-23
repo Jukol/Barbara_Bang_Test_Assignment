@@ -1,6 +1,6 @@
 using System;
-using Data;
-namespace Models
+
+namespace Data
 {
     [Serializable]
     public struct UnitsData

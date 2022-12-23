@@ -6,10 +6,10 @@ namespace Models
     {
         public event Action OnDied;
         
-        public UnitType Type;
-        public UnitAbility Ability;
-        public Abilities Abilities;
-        public bool IsEnemy;
+        public readonly UnitType Type;
+        public readonly UnitAbility Ability;
+        public readonly Abilities Abilities;
+        public readonly bool IsEnemy;
         public UnitStates State;
         
         public UnitData UnitData;
@@ -58,10 +58,8 @@ namespace Models
                 Abilities.DealDamage(UnitData.abilityPower, target);
         }
 
-        public void Die()
-        {
+        private void Die() => 
             OnDied?.Invoke();
-        }
     }
 
 }

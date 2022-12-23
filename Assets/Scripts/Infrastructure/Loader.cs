@@ -5,16 +5,20 @@ namespace Infrastructure
 {
     public class Loader : MonoBehaviour
     {
+        public Bootstrapper Bootstrapper => _bootstrapper;
+        public int CurrentLevel => _currentLevel;
+        
         [SerializeField] private ScenePopulator scenePopulator;
         [SerializeField] private GameObject levelSelector;
-
+        
         private DependencyInjector _di;
         private int _currentLevel;
+        private Bootstrapper _bootstrapper;
     
         private void Awake()
         {
-            var bootstrapper = FindObjectOfType<Bootstrapper>();
-            _di = bootstrapper.Game.DependencyInjector;
+            _bootstrapper = FindObjectOfType<Bootstrapper>();
+            _di = _bootstrapper.Game.DependencyInjector;
         }
     
         private void Start()
@@ -38,7 +42,8 @@ namespace Infrastructure
         public void StartNext()
         {
             levelSelector.SetActive(false);
-            scenePopulator.Init(_di, _currentLevel + 1);
+            _currentLevel++;
+            scenePopulator.Init(_di, _currentLevel);
         }
     }
 }

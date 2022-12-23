@@ -559,8 +559,8 @@ MonoBehaviour:
   battleSystem: {fileID: 577409473}
   popup: {fileID: 1280744857}
   turnInfo: {fileID: 1891972961}
-  winPopup: {fileID: 487655537}
-  losePopup: {fileID: 1036258172}
+  winPopup: {fileID: 487655541}
+  losePopup: {fileID: 1036258176}
 --- !u!4 &176016672
 Transform:
   m_ObjectHideFlags: 0
@@ -1434,6 +1434,7 @@ GameObject:
   - component: {fileID: 487655538}
   - component: {fileID: 487655540}
   - component: {fileID: 487655539}
+  - component: {fileID: 487655541}
   m_Layer: 5
   m_Name: Win_Popup
   m_TagString: Untagged
@@ -1463,7 +1464,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -1250.5823, y: -786.674}
+  m_SizeDelta: {x: -1250.5823, y: -599.3289}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &487655539
 MonoBehaviour:
@@ -1503,6 +1504,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 487655537}
   m_CullTransparentMesh: 1
+--- !u!114 &487655541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487655537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac739fa1f319f8a4aba3a1865eeeb8cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextButton: {fileID: 1903520691}
+  loader: {fileID: 235303560}
 --- !u!1 &533443468
 GameObject:
   m_ObjectHideFlags: 0
@@ -1549,7 +1564,7 @@ GameObject:
   - component: {fileID: 540076487}
   - component: {fileID: 540076486}
   m_Layer: 5
-  m_Name: Turn_button
+  m_Name: Next_turn_button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3161,6 +3176,7 @@ GameObject:
   - component: {fileID: 1036258173}
   - component: {fileID: 1036258175}
   - component: {fileID: 1036258174}
+  - component: {fileID: 1036258176}
   m_Layer: 5
   m_Name: Lose_Popup
   m_TagString: Untagged
@@ -3190,7 +3206,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -1250.5823, y: -786.674}
+  m_SizeDelta: {x: -1250.5823, y: -599.3289}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1036258174
 MonoBehaviour:
@@ -3230,6 +3246,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1036258172}
   m_CullTransparentMesh: 1
+--- !u!114 &1036258176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036258172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac739fa1f319f8a4aba3a1865eeeb8cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextButton: {fileID: 2005058519}
+  loader: {fileID: 235303560}
 --- !u!1 &1085113091
 GameObject:
   m_ObjectHideFlags: 0
@@ -4605,7 +4635,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Back
+  m_text: Next
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4740,7 +4770,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Back
+  m_text: Next
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5066,7 +5096,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 487655537}
+      - m_Target: {fileID: 1036258172}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -5689,7 +5719,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 487655537}
+      - m_Target: {fileID: 1036258172}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -6001,7 +6031,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 487655537}
+      - m_Target: {fileID: 1036258172}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
