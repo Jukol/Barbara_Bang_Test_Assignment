@@ -10,6 +10,7 @@ namespace View
         [SerializeField] private GameObject turnInfo;
         [SerializeField] private Popup winPopup;
         [SerializeField] private Popup losePopup;
+        [SerializeField] private Popup tiePopup;
 
         private bool _gameOver;
         private bool _turnButtonPressed;
@@ -18,14 +19,18 @@ namespace View
         {
             battleSystem.OnWin += OnWin;
             battleSystem.OnLose += OnLose;
+            battleSystem.OnTie += OnTie;
             turnInfo.SetActive(true);
         }
         
         private void OnWin() => 
             winPopup.gameObject.SetActive(true);
 
-        private void OnLose() => 
+        private void OnLose() =>
             losePopup.gameObject.SetActive(true);
+        
+        private void OnTie() => 
+            tiePopup.gameObject.SetActive(true);
 
         public async void OnTurnButton()
         {

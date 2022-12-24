@@ -15,6 +15,7 @@ namespace View
         
         public event Action OnWin;
         public event Action OnLose;
+        public event Action OnTie;
         
         public bool NextTurn { get; private set; }
         
@@ -68,8 +69,8 @@ namespace View
                 await DamageOrHeal(aimingFriend, targetEnemy);
             else if (targetFriend != null && aimingFriend != null)
                 await DamageOrHeal(aimingFriend, targetFriend);
-            else if (targetFriend != null && targetFriend.Unit.Type == UnitType.Healer && aimingFriend == null) 
-                await DamageOrHeal(targetFriend, targetFriend); //self heal
+            else if (targetFriend != null && aimingFriend == null) 
+                await DamageOrHeal(targetFriend, targetFriend); //self heal or damage
             
             onTurnEnd?.Invoke();
         }
@@ -275,8 +276,24 @@ namespace View
                 {
                     _gameOver = true;
                     OnWin?.Invoke();
+                    return;
                 }
             }
+            
+            if (CheckForTie())
+            {
+                _gameOver = true;
+                OnTie?.Invoke();
+            }
+        }
+        private bool CheckForTie()
+        {
+            if (_friends.Count == 1 && _enemies.Count == 1)
+            {
+                if (_friends[0].Unit.Type == UnitType.Healer && _enemies[0].Unit.Type == UnitType.Healer)
+                    return true;
+            }
+            return false;
         }
 
         private void OnDisable()
